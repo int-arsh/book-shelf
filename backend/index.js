@@ -22,11 +22,20 @@ const app = express();
 // than our backend (e.g., 5000), we need to explicitly allow our frontend to talk to our backend.
 const cors = require('cors');
 
+// Import the database connection function we just created.
+// This line brings in our 'connectDB' function from the 'config/db.js' file.
+const connectDB = require('./config/db');
+
 // Define the port number our server will listen on.
 // We first try to get it from environment variables (process.env.PORT), which is good for production.
 // If it's not set (e.g., in development), we default to 5000.
 // This is like deciding which door number our post office will use.
 const PORT = process.env.PORT || 5000;
+
+// Connect to the database.
+// Call our connectDB function. This will establish the connection to MongoDB
+// as soon as our server starts.
+connectDB();
 
 // Middleware: express.json()
 // This is a built-in Express middleware function.
