@@ -26,6 +26,10 @@ const cors = require('cors');
 // This line brings in our 'connectDB' function from the 'config/db.js' file.
 const connectDB = require('./config/db');
 
+// Import our book routes.
+// This line brings in our 'router' object from the 'routes/bookRoutes.js' file.
+const bookRoutes = require('./routes/bookRoutes');
+
 // Define the port number our server will listen on.
 // We first try to get it from environment variables (process.env.PORT), which is good for production.
 // If it's not set (e.g., in development), we default to 5000.
@@ -50,6 +54,12 @@ app.use(express.json());
 // For a beginner, this is fine, but in a real production app, you might want to restrict
 // this to only allow requests from your specific frontend domain for better security.
 app.use(cors());
+
+
+// Define the base route for our book API.
+// Any request that starts with '/api/books' will be handled by our bookRoutes.
+// For example, a GET request to http://localhost:5000/api/books will be directed to our getBooks controller.
+app.use('/api/books', bookRoutes);
 
 // Define our first route (an API endpoint).
 // This is like defining a specific counter at our post office.
