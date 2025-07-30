@@ -55,13 +55,7 @@ const bookSchema = mongoose.Schema(
             min: 0, // Cannot be a negative page number.
             // Custom validator to ensure currentPage doesn't exceed totalPages.
             // This is an advanced feature but good to include.
-            validate: {
-                validator: function(v) {
-                    // 'this.totalPages' refers to the 'totalPages' field of the current document.
-                    return v <= this.totalPages;
-                },
-                message: props => `${props.value} is greater than total pages ${props.path}`
-            }
+            
         },
         // Field 7: 'notes'
         // A section for the user to add personal notes about the book.

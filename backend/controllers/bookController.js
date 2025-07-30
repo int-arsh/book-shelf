@@ -64,8 +64,79 @@ const addBook = async (req, res) => {
     }
 };
 
-// Export the controller functions so they can be used in our routes file.
+
+// --- Controller Function 3: Update an Existing Book ---
+// This function will be triggered when a PUT request is made to '/api/books/:id'.
+const updateBook = async (req, res) => {
+    try {
+        // The book's unique ID is passed in the URL parameters.
+        // We can access it using 'req.params.id'.
+        const { id } = req.params;
+
+        // Find the book by its ID. We use 'findById' to ensure the book exists first.
+        const book = await Book.findById(id);
+
+        // If no book is found with the given ID, return a 404 Not Found error.
+        if (!book) {
+            return res.status(404).json({ message: 'Book not found' });
+        }
+
+        // Update the book in the database.
+        // We use 'findByIdAndUpdate' which is a Mongoose method that finds and updates a document.
+        // The first argument is the ID of the document to update.
+        // The second argument is the data to update with. 'req.body' contains the new data.
+        // The third argument, `{ new: true, runValidators: true }`, is important:
+        // - `new: true` tells Mongoose to return the *updated* document, not the original one.
+        // - `runValidators: true` ensures that any update data is checked against the schema's validation rules
+        //   (e.g., ensuring currentPage is not greater than totalPages).
+        const updatedBook = await Book.findByIdAndUpdate(id, req.body, {
+            new: true,
+            runValidators: true,
+        });
+
+        // Send back a success response (status 200) with the updated book object.
+        res.status(200).json(updatedBook);
+    } catch (error) {
+        // If an error occurs (e.g., invalid ID format or validation fails), handle it here.
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// --- Controller Function 4: Delete an Existing Book ---
+// This function will be triggered when a DELETE request is made to '/api/books/:id'.
+const deleteBook = async (req, res) => {
+    try {
+        // Get the book's ID from the URL parameters.
+        const { id } = req.params;
+
+        // Find the book by its ID.
+        const book = await Book.findById(id);
+
+        // If no book is found, return a 404 Not Found error.
+        if (!book) {
+            return res.status(404).json({ message: 'Book not found' });
+        }
+
+        // Delete the book from the database.
+        // 'deleteOne' is a Mongoose method to remove a single document.
+        // We could also use 'findByIdAndDelete(id)'.
+        await Book.deleteOne({ _id: id });
+
+        // Send a success response (status 200) with a confirmation message.
+        res.status(200).json({ message: 'Book removed' });
+    } catch (error) {
+        // Handle any errors that occur.
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Make sure to update the 'module.exports' at the end to include our new functions.
 module.exports = {
     getBooks,
     addBook,
+    updateBook,
+    deleteBook,
 };
+
