@@ -53,9 +53,6 @@ const bookSchema = mongoose.Schema(
             required: true, // We want to track this for every book the user adds.
             default: 0, // Starts at page 0 when added.
             min: 0, // Cannot be a negative page number.
-            // Custom validator to ensure currentPage doesn't exceed totalPages.
-            // This is an advanced feature but good to include.
-            
         },
         // Field 7: 'notes'
         // A section for the user to add personal notes about the book.

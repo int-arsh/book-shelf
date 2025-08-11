@@ -1,98 +1,87 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Layout from './components/Layout';
+import BookSearch from './components/BookSearch';
+import BookshelfSection from './components/BookshelfSection';
+import './App.css'; 
 
-const BookSearch = () => {
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [coverUrl, setCoverUrl] = useState(null);
-  const [typingTimeout, setTypingTimeout] = useState(0);
 
-  const fetchSuggestions = async (searchText) => {
-    try {
-      const res = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(searchText)}`
-      );
+function App() {
+    // holds books from my database
+    const [books, setBooks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-      const items = res.data.items || [];
-      setSuggestions(items.slice(0, 5)); // top 5 suggestions
-    } catch (err) {
-      console.error("Google Books fetch error:", err);
-    }
-  };
+    // fetch all books from backend
+    const initialFetchBooks = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get('http://localhost:5000/api/books');
+            setBooks(response.data);
+        } catch (err) {
+            console.log('Eroor fetching book:', err);
+            setError('Failed to load your bookshelf. Please try again.')
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  const handleInputChange = (e) => {
-    const value = e.target.value;
-    setQuery(value);
-    setCoverUrl(null);
-    if (typingTimeout) clearTimeout(typingTimeout);
+    // NEW: A function to add a single book to the state without a full re-fetch.
+    const handleBookAdded = (newBook) => {
+        setBooks(prevBooks => [...prevBooks, newBook]);
+    };
 
-    setTypingTimeout(
-      setTimeout(() => {
-        if (value.trim()) fetchSuggestions(value);
-      }, 300)
-    );
-  };
+    // NEW: A function to remove a single book from the state.
+    const handleBookRemoved = (bookId) => {
+        setBooks(prevBooks => prevBooks.filter(book => book._id !== bookId));
+    };
 
-  const handleSelect = (book) => {
-    setQuery(book.volumeInfo.title);
-    setSuggestions([]);
+    /// A targeted update function for when a book's page count or notes change.
+    const handleBookUpdate = (updatedBook) => {
+        setBooks(prevBooks => 
+        prevBooks.map(book => 
+            book._id === updatedBook._id ? updatedBook : book)
+        );
+    };
 
-    const thumbnail = book.volumeInfo.imageLinks?.thumbnail?.replace("http:", "https:");
-    if (thumbnail) {
-      setCoverUrl(thumbnail);
-    } else {
-      setCoverUrl(null);
-      alert("Cover not found");
-    }
-  };
+    // render on mount
+    useEffect(() => {
+        initialFetchBooks();
+    }, []);
+
+    // filter books based on status
+    const readingBooks = books.filter(book => book.status === 'reading');
+    const completedBooks = books.filter(book => book.status === 'completed');
+    const wantToReadBooks = books.filter(book => book.status === 'want-to-read');
+
+
+
+
+
+
 
   return (
-    <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-      <h2>Book Cover Finder (Google Books)</h2>
-      <input
-        type="text"
-        value={query}
-        onChange={handleInputChange}
-        placeholder="Type book title..."
-        style={{ padding: '0.5rem', width: '300px' }}
+    <Layout>
+
+      <BookSearch 
+        bookshelfBooks={books}
+        onBookAdded={handleBookAdded}
+        onBookRemoved={handleBookRemoved}
       />
-      
-      {suggestions.length > 0 && (
-        <ul style={{
-          listStyle: 'none',
-          marginTop: '0.5rem',
-          padding: '0',
-          width: '300px',
-          margin: '0 auto',
-          background: '#f0f0f0',
-          border: '1px solid #ccc'
-        }}>
-          {suggestions.map((book, index) => {
-            const info = book.volumeInfo;
-            return (
-              <li
-                key={index}
-                onClick={() => handleSelect(book)}
-                style={{
-                  padding: '0.5rem',
-                  cursor: 'pointer',
-                  borderBottom: '1px solid #ddd'
-                }}
-              >
-                {info.title} {info.authors ? `– ${info.authors.join(", ")}` : ''}
-              </li>
-            );
-          })}
-        </ul>
-      )}
 
-      {coverUrl && (
-        <div style={{ marginTop: '2rem' }}>
-          <img src={coverUrl} alt="Book Cover" style={{ maxHeight: '400px' }} />
-        </div>
-      )}
-    </div>
+      <div className="bookshelf-sections">
+        {loading && <p>Loading bookshelf...</p>}
+        {error && <p className="error-message">{error}</p>}
+        {!loading && !error && (
+          <>
+            <BookshelfSection title="Reading" books={readingBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
+            <BookshelfSection title="Completed" books={completedBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
+            <BookshelfSection title="Want to Read" books={wantToReadBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
+          </>
+        )}
+      </div>
+    </Layout>
   );
-};
+}
 
-export default BookSearch;
+export default App;

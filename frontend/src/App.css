@@ -1,0 +1,425 @@
+/* frontend/src/App.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;      
+}
+
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Make sure the layout takes at least the full viewport height */
+}
+
+.app-header {
+  background-color: #4CAF50; /* A pleasant green */
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header h1 {
+  margin: 0;
+}
+
+.app-main {
+  flex-grow: 1; /* Allows the main content area to take up available space */
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto; /* Center the main content */
+}
+
+.book-search-container {
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  text-align: center; /* Center the search form */
+}
+
+.book-search-container h2 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+
+/* New styles for the dynamic search bar */
+.search-form-wrapper {
+  position: relative; /* This is crucial for positioning the suggestions list */
+  width: 100%; /* Full width for the search form */
+  max-width: 600px; /* Limit the width for better aesthetics */
+  margin: 0 auto; /* Center the search form */
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Space between input and button */
+  position: relative;
+}
+
+.search-input {
+  flex-grow: 1;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  /* NEW: Add padding to the right to make space for the 'X' button */
+  padding-right: 2.5rem; 
+}
+
+.search-button {
+  padding: 0.8rem 1.5rem;
+  background-color: #007bff; /* A standard blue */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+.clear-input-button {
+  background: none;
+  background-color: #0056b3;
+  border: none;
+  color: #888;
+  font-size: 2.5rem;
+  cursor: pointer;
+  z-index: 10;
+  line-height: 1;
+}
+
+.search-suggestions {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  width: 70%; /* Match the input width */
+  max-width: 400px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.suggestion-item {
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+/*
+  Search Results Display:
+  The grid that shows all the book cards after a search.
+*/
+.search-results {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* A nice responsive grid */
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+
+
+/* ... (existing styles) ... */
+
+
+.book-card {
+  display: flex;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  transition: transform 0.2s ease-in-out;
+  flex-direction: column; /* Stack image and details vertically */
+  align-items: center; /* Center items horizontally */
+  text-align: center;
+}
+
+.book-card:hover {
+  transform: translateY(-5px); /* Lift the card on hover */
+}
+
+.book-poster {
+  width: 100%;
+  max-width: 150px; /* A consistent size for book posters */
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  margin-bottom: 1rem; /* Space below the image */
+}
+
+.book-details {
+  flex-grow: 1; /* Allow details section to grow */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.book-title {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+  color: #333;
+}
+
+.book-author {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 0 0.5rem;
+}
+
+.book-pages {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0;
+}
+
+/*
+  Buttons:
+  General styles for add, remove, and page control buttons.
+*/
+
+.add-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.add-button:hover {
+  background-color: #45a049;
+}
+
+.add-button.added-button {
+  background-color: #ccc; /* A gray color */
+  color: #666;
+  cursor: not-allowed;
+  border: 1px solid #999;
+}
+
+.add-button.added-button:hover {
+  background-color: #ccc; /* Prevent hover effect */
+}
+
+.error-message {
+  color: #d9534f;
+  text-align: center;
+}
+
+
+.remove-button {
+  background-color: #d9534f; /* A red color for danger */
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+  background-color: #c9302c;
+}
+
+/*
+  Error & Message Styling:
+  For displaying error messages and empty states.
+*/
+.error-message {
+  color: #d9534f;
+  text-align: center;
+}
+
+.no-books-message {
+  color: #666;
+  text-align: center;
+}
+
+
+/*
+  Bookshelf Sections:
+  The containers for 'Reading', 'Completed', and 'Want to Read' books.
+*/
+.bookshelf-sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive columns */
+  gap: 2rem;
+}
+
+/* Styles for Bookshelf Sections */
+.bookshelf-section-container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+}
+
+.bookshelf-section-title {
+  color: #007bff;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 0.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+
+/* Book Grid on Bookshelf */
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+/* Book Details Card on Bookshelf */
+.book-card-on-shelf {
+  display: flex;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  flex-direction: row;
+  align-items: flex-start; /* Align items to the top */
+  gap: 1rem;
+}
+
+.book-poster-shelf {
+  width: 100px;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.book-details-shelf {
+  flex-grow: 1;
+}
+
+
+/* Styles for the Progress Section */
+.progress-container {
+  /* Use Flexbox to lay out the children side-by-side or stacked */
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  align-items: center; /* Center items horizontally */
+  position: relative;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+/* The actual progress bar and text */
+.progress-bar {
+  height: 25px; /* Fixed height for the bar */
+  background-color: #4CAF50;
+  transition: width 0.3s ease-in-out;
+  border-radius: 5px;
+  position: absolute; /* Position it behind the text and controls */
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.progress-text {
+  /* Position the text on top of the progress bar */
+  position: relative;
+  z-index: 1; /* Make sure the text is above the progress bar */
+  color: black;
+  font-weight: bold;
+  font-size: 0.9rem;
+  padding: 0.2rem 0; /* Add some vertical padding for clarity */
+}
+
+/* Controls for the page count */
+.progress-controls {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  z-index: 2; /* Ensure controls are on top of everything */
+  position: relative;
+}
+
+.page-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.page-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background-color 0.2s;
+}
+
+.page-button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.page-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.page-slider {
+  width: 100%;
+  margin-top: 0.5rem;
+  z-index: 2; /* Make sure the slider is also on top */
+}
+
+.notes-container {
+  margin-top: 1rem;
+}
+
+.notes-container h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+.notes-textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  resize: vertical; /* Allow vertical resizing */
+}

@@ -30,6 +30,10 @@ const connectDB = require('./config/db');
 // This line brings in our 'router' object from the 'routes/bookRoutes.js' file.
 const bookRoutes = require('./routes/bookRoutes');
 
+
+// Import our new Google Books API route
+const apiRoutes = require('./routes/apiRoutes');
+
 // Define the port number our server will listen on.
 // We first try to get it from environment variables (process.env.PORT), which is good for production.
 // If it's not set (e.g., in development), we default to 5000.
@@ -60,6 +64,11 @@ app.use(cors());
 // Any request that starts with '/api/books' will be handled by our bookRoutes.
 // For example, a GET request to http://localhost:5000/api/books will be directed to our getBooks controller.
 app.use('/api/books', bookRoutes);
+
+
+// Use our Google Books API proxy route
+// All requests to /api/googlebooks will be handled by apiRoutes
+app.use('/api/googlebooks', apiRoutes);
 
 // Define our first route (an API endpoint).
 // This is like defining a specific counter at our post office.
