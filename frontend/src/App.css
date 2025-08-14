@@ -228,6 +228,9 @@ body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;
+  box-shadow: 0 0 2px #ccc,inset 0 0 70px #ece7dd;
+
+
 }
 
 .suggestion-item {
@@ -269,13 +272,15 @@ body {
 .book-card {
   display: flex;
   background-color: #fff;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 1rem;
   transition: transform 0.2s ease-in-out;
   flex-direction: column; /* Stack image and details vertically */
   align-items: center; /* Center items horizontally */
   text-align: center;
+  box-shadow: 0 0 2px #ccc,inset 0 0 70px #ece7dd;
+
 }
 
 .book-card:hover {
@@ -323,7 +328,7 @@ body {
 */
 
 .add-button {
-  background-color: #4CAF50;
+  background-color: #4CAF8AE0;
   color: white;
   border: none;
   padding: 0.7rem 1.2rem;
@@ -356,7 +361,7 @@ body {
 
 
 .remove-button {
-  background-color: #d9534f; /* A red color for danger */
+  background-color: #dd7373; /* A red color for danger */
   color: white;
   border: none;
   padding: 0.7rem 1.2rem;

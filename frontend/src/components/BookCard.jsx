@@ -30,7 +30,7 @@ const BookCard = ({ book, isBookOnShelf, onAdd, onRemove }) => {
     <div className="book-card">
       <img src={posterUrl} alt={`${title} cover`} className="book-poster" />
       <div className="book-details">
-        <h3 className="book-title">{title}</h3>
+        <p className="book-title">{title}</p>
         <p className="book-author">by {author}</p>
         <p className="book-pages">{totalPages} pages</p>
         
