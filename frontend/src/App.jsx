@@ -61,26 +61,27 @@ function App() {
 
 
   return (
-    <Layout>
+    <div className='centered-container'>
+      <Layout>
+        <BookSearch 
+          bookshelfBooks={books}
+          onBookAdded={handleBookAdded}
+          onBookRemoved={handleBookRemoved}
+        />
 
-      <BookSearch 
-        bookshelfBooks={books}
-        onBookAdded={handleBookAdded}
-        onBookRemoved={handleBookRemoved}
-      />
-
-      <div className="bookshelf-sections">
-        {loading && <p>Loading bookshelf...</p>}
-        {error && <p className="error-message">{error}</p>}
-        {!loading && !error && (
-          <>
-            <BookshelfSection title="Reading" books={readingBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
-            <BookshelfSection title="Completed" books={completedBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
-            <BookshelfSection title="Want to Read" books={wantToReadBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
-          </>
-        )}
-      </div>
-    </Layout>
+        <div className="bookshelf-sections">
+          {loading && <p>Loading bookshelf...</p>}
+          {error && <p className="error-message">{error}</p>}
+          {!loading && !error && (
+            <>
+              <BookshelfSection title="Reading" books={readingBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
+              <BookshelfSection title="Completed" books={completedBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
+              <BookshelfSection title="Want to Read" books={wantToReadBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />
+            </>
+          )}
+        </div>
+      </Layout>
+    </div>
   );
 }
 

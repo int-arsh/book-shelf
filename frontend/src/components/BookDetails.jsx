@@ -87,7 +87,7 @@ const BookDetails = ({ book, onUpdate }) => {
     <div className="book-card-on-shelf">
       <img src={book.posterUrl} alt={`${book.title} cover`} className="book-poster-shelf" />
       <div className="book-details-shelf">
-        <h3 className="book-title">{book.title}</h3>
+        <p className="book-title">{book.title}</p>
         <p className="book-author">by {book.author}</p>
 
         {/* Page progress bar */}
@@ -137,14 +137,16 @@ const BookDetails = ({ book, onUpdate }) => {
 
         {/* Notes section */}
         <div className="notes-container">
-          <h4>Your Notes</h4>
+          <p>Your Notes</p>
           <textarea
             value={notes}
             onChange={handleNotesChange}
             onBlur={handleNotesBlur} // Save notes when the user clicks away
             placeholder="Add your notes here..."
             className="notes-textarea"
-            rows="4"
+            rows="10"
+            cols="20"
+            
           />
         </div>
       </div>

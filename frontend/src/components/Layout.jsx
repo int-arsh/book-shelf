@@ -1,6 +1,4 @@
-// frontend/src/components/Layout.jsx
-
-import React from 'react';
+import Header from "./Header";
 
 // The Layout component acts as a wrapper for our main application content.
 // It takes 'children' as a prop, which means whatever components we render
@@ -8,14 +6,7 @@ import React from 'react';
 const Layout = ({ children }) => {
   return (
     <div className="layout-container">
-      {/* Header section of our bookshelf */}
-      <header className="app-header">
-        {/* Our main application title */}
-        <h1>My Personal Bookshelf</h1>
-        {/* You could add navigation links here later, e.g., to different sections */}
-      </header>
-
-      {/* Main content area, where other components (like search, book lists) will be rendered */}
+      <Header />
       <main className="app-main">
         {children} {/* This is where the actual page content will go */}
       </main>

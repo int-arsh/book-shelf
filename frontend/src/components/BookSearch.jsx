@@ -138,7 +138,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
 
   return (
     <div className="book-search-container">
-      <h2>Search for Books</h2>
+      {/* <h2>Search for Books</h2> */}
       <div className='search-form-wrapper'>
         <form onSubmit={handleSearch} className="search-form">
           <input

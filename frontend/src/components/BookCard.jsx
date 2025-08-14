@@ -6,7 +6,7 @@ import { useState } from "react";
 const BookCard = ({ book, isBookOnShelf, onAdd, onRemove }) => {
   const title = book.volumeInfo.title || 'No Title Available';
   const author = book.volumeInfo.authors?.join(', ') || 'Unknown Author';
-  const posterUrl = book.volumeInfo.imageLinks?.thumbnail || 'https://via.placeholder.com/150x200?text=No+Cover';
+  const posterUrl = book.volumeInfo.imageLinks?.thumbnail || `https://via.placeholder.com/150x200?text=${title}`;
   const totalPages = book.volumeInfo.pageCount || 0;
   const googleBookId = book.id;
 

@@ -4,7 +4,7 @@ import BookDetails from './BookDetails'; // We'll create this component in the n
 const BookshelfSection = ({ title, books, onUpdate }) => {
   return (
     <div className="bookshelf-section-container">
-      <h2 className="bookshelf-section-title">{title}</h2>
+      <p className="bookshelf-section-title">{title}</p>
       
       {/* If there are no books in this section, display a message */}
       {books.length === 0 ? (
