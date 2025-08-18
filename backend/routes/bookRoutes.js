@@ -8,6 +8,16 @@ const router = express.Router();
 // Import the controller functions we just created.
 const { getBooks, addBook, updateBook, deleteBook } = require('../controllers/bookController');
 
+// NEW: Import our authentication middleware.
+const { protect } = require('../middleware/authMiddleware');
+
+// NEW: we apply the protect middleware to the routes.
+// run before the controller functions. 
+// ACTION: Apply the 'protect' middleware to all routes in this router at once.
+router.use(protect);
+
+// NEW: we apply the protect middleware to the routes.
+// run before the controller functions.
 // Define the routes.
 // We are chaining the methods for the same URL for cleaner code.
 router.route('/')

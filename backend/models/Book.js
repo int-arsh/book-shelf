@@ -30,7 +30,7 @@ const bookSchema = mongoose.Schema(
         googleBookId: {
             type: String,
             required: true,
-            unique: true, // Ensures that no two books in our database have the same Google Book ID.
+            // unique: true, // Ensures that no two books in our database have the same Google Book ID.
         },
         // Field 4: 'posterUrl' (or 'coverImageUrl')
         // This will store the URL to the book's cover image.
@@ -75,6 +75,11 @@ const bookSchema = mongoose.Schema(
         // For now, it could be a hardcoded ID or left out if we strictly stick to single-user.
         // For simplicity for a beginner project, let's omit this for now.
         // We can add it later if we decide to expand to multiple users.
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'User', // This is the name of the model we're referencing.
+        },
 
     },
     {
@@ -83,6 +88,10 @@ const bookSchema = mongoose.Schema(
                           // These are useful for knowing when a book record was created and last modified.
     }
 );
+
+// Action: Define a compound unique index .
+// this ensure that the combination of 'googleBookId' and 'userId' is unique.
+bookSchema.index({ googleBookId: 1, user: 1 }, { unique: true });
 
 // Create the Mongoose Model.
 // A Mongoose Model is a class with which we construct documents in MongoDB.

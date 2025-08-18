@@ -129,11 +129,88 @@ body {
   flex-grow: 1; /* Allows the main content area to take up available space */
   padding: 2rem;
   max-width: 1200px;
-  margin: 0 auto; /* Center the main content */
+  /* margin: 0 auto; Center the main content */
+}
+
+/*
+  Authentication Form Styles
+  --------------------------
+  These styles are for the Login and Register components.
+*/
+.auth-form-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 2px #ccc, inset 0 0 70px #ece7dd;
+  text-align: center;
+}
+
+.auth-form-title {
+  font-family: 'Times New Roman', serif;
+  font-size: 1.7rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form input {
+  padding: 0.8rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: inset 0 0 5px #f0f0f0;
+}
+
+.auth-form input:focus {
+  outline: none;
+  box-shadow: 0 0 1px #ccc,inset 0 0 20px #ece7dd;
+  border: 1px solid #140a0a52;
+  cursor: text;
+  transition: border 0.2s ease-in-out;
+}
+
+.auth-form button {
+  padding: 0.8rem;
+  font-size: 1rem;
+  color: white;
+  background-color: #522202e8;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.auth-form button:hover {
+  background-color: #5a4606e0;
+}
+
+.auth-link-text {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.auth-link-text a {
+  color: #522202e8;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-link-text a:hover {
+  text-decoration: underline;
 }
 
 /* NEW: Styles for the combined home page content */
 .homepage-content {
+  font-size: 1.5rem;
   text-align: center;
   padding: 2rem;
   margin-bottom: 2rem; /* Add space between the welcome message and search bar */
@@ -195,6 +272,14 @@ body {
   box-shadow: 0 0 1px #ccc,inset 0 0 20px #ece7dd;
 }
 
+.search-input:focus {
+  outline: none;
+  box-shadow: 0 0 1px #ccc,inset 0 0 20px #ece7dd;
+  border: 1px solid #140a0a52;
+  cursor: text;
+  transition: border 0.2s ease-in-out;
+}
+
 .search-button {
   padding: 0.8rem 1.5rem;
   background-color: #522202e8; /* A standard blue */
@@ -204,6 +289,7 @@ body {
   cursor: pointer;
   font-size: 1rem;
   transition: background-color 0.2s ease-in-out;
+  width: 130px;
 }
 
 .search-button:hover {
@@ -212,7 +298,7 @@ body {
 
 .clear-input-button {
   position: absolute;
-  right: 7rem;
+  right: 9rem;
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -266,6 +352,7 @@ body {
   margin-top: 2rem;
   text-align: center;
   box-shadow: 0 0 2px #ccc,inset 0 0 40px #ece7dd;
+  /* min-height: 100px; */
   
 }
 
@@ -290,7 +377,14 @@ body {
   margin-top: 0.5rem;
 }
 
-
+.loading-text {
+  color: #353535d8;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  margin-bottom: 0;
+  padding-top: 1.4rem;
+  padding-bottom: 1.4rem;
+}
 
 /* ... (existing styles) ... */
 
@@ -377,6 +471,7 @@ body {
 .error-message {
   color: #d9534f;
   text-align: center;
+  padding-top: 1.4rem;
 }
 
 
@@ -428,6 +523,7 @@ body {
   /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
   box-shadow: 0 0 2px #ccc,inset 0 0 70px #ece7dd;
   padding: 2rem;
+  min-height: 400px;
 }
 
 .bookshelf-section-title {
@@ -564,8 +660,68 @@ body {
 .notes-textarea {
   /* width: 100%; */
   padding: 0.5rem;
-  border-radius: 5px;
+  border-radius: 4px;
   border: 1px solid #ccc;
-  resize: vertical; /* Allow vertical resizing */
-  /* border:none; */
+  outline: none;
+  resize: none; /* Allow vertical resizing */
+  border:none;
+  overflow-y: auto;
+  box-shadow: 0 0 1px #ccc,inset 0 0 20px #ece7dd;
+  transition: border 0.2s ease-in-out;
+}
+
+/* Notes Page Specific Styles
+  --------------------------
+*/
+.notes-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 0 2px #ccc, inset 0 0 70px #ece7dd;
+}
+
+.notes-page-title {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #353535d8;
+  margin-bottom: 2rem;
+}
+
+.no-notes-message {
+  font-style: italic;
+  color: #666;
+  text-align: center;
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.note-card {
+  padding: 1.5rem;
+  /* background-color: #f9f9f9; */
+  /* border: 1px solid #eee; */
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.note-book-title {
+  font-size: 1.2rem;
+  margin-top: 0;
+  margin-bottom: 0.2rem;
+}
+
+.note-book-author {
+  font-style: italic;
+  color: #888;
+  font-size: 0.9rem;
+  margin-top: 0;
+}
+
+.note-content p {
+  line-height: 1.6;
+  font-size: 0.9rem;
 }

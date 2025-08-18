@@ -1,4 +1,5 @@
 import logo from '../assets/logoc.png'; 
+import { useAuth } from '../context/AuthContext';
 
 
 const Header = ({ onSectionSelect, selectedSection }) => {
@@ -6,12 +7,15 @@ const Header = ({ onSectionSelect, selectedSection }) => {
     e.preventDefault();
     onSectionSelect(sectionName);
   };
+
+  // NEW: get the user and logout function from the context.
+  const { user, logout } = useAuth();
   
   return (
     <header className="new-app-header">
       <div className="header-top-row">
         <div className="logo-container">
-          <a href="#" onClick={(e) => handleNavClick(e, 'Home')}>
+          <a href="#" onClick={(e) => handleNavClick(e, 'Search')}>
             <img src={logo} alt="Logo" className="logo" />
           </a>
         </div>
@@ -19,13 +23,22 @@ const Header = ({ onSectionSelect, selectedSection }) => {
           <a 
             href="#" 
             className="nav-link"
-            onClick={(e) => handleNavClick(e, 'Home')}
+            onClick={(e) => handleNavClick(e, 'Search')}
           >
-            Home
+            Search
           </a>
-          <a href="#" className="nav-link">Login</a>
-          <a href="#" className="nav-link">Register</a>
-          <a href="#" className="nav-link">Help</a>
+
+          {/* NEW: Conditionally render auth links based on user state. */}
+          {user ? (
+            <>
+              <a href="#" className="nav-link" onClick={logout}>Logout</a>
+            </>
+          ):(
+            <>
+              <a href="#" className="nav-link" onClick={(e) => handleNavClick(e, 'Login')}>Login</a>
+              <a href="#" className="nav-link" onClick={(e) => handleNavClick(e, 'Register')}>Register</a>
+            </>
+          )}
         </div>
       </div>
 

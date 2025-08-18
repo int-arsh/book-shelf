@@ -5,7 +5,7 @@ import BookCard from './BookCard';
 
 
 // This component handles searching for books.
-const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
+const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved, onSearchActive }) => {
   const [searchText, setSearchText] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -31,10 +31,10 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
           status: 'want-to-read', // Set the initial status
       });
       onBookAdded(response.data); // Call the parent function to update the bookshelf state
-      setSuggestions([]);
-      setSearchResults([]);
-      setSearchText('');
-      setHasSearched(false);
+      // setSuggestions([]);
+      // setSearchResults([]);
+      // setSearchText('');
+      // setHasSearched(false);
       return true;
           
     } catch (err) {
@@ -76,6 +76,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
       setSuggestions([]);
       setSearchResults([]);
       setHasSearched(false);
+      onSearchActive(false);
     }
   };
   
@@ -115,6 +116,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
     setError(null);
     setSuggestions([]); // Clear suggestions when a search is made
     setHasSearched(true); // Set this to true to indicate a search has been made
+    onSearchActive(true);
     
     try {
       // Use our backend proxy route to search for books
@@ -137,6 +139,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
     setSuggestions([]);
     setSearchResults([]);
     setHasSearched(false);
+    onSearchActive(false);
   };
 
   // NEW: useEffect hook to handle clicks outside of the search component.
@@ -174,13 +177,13 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
               className="search-input"
             />
             {searchText && (
-              <button type="button" className="clear-input-button" onClick={handleClearInput}>
+              <span className="clear-input-button" onClick={handleClearInput}>
                 &times; {/* This is a simple "X" icon */}
-              </button>
+              </span>
             )}
           {/* </div> */}
-          <button type="submit" className="search-button" disabled={loading}>
-            {loading ? 'Searching...' : 'Search'}
+          <button type="submit" className="search-button" disabled={loading || searchText.trim() === ''}>
+            {loading ? 'Searching' : 'Search'}
           </button>
         </form>
         {/* Suggestions dropdown */}
@@ -199,7 +202,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved }) => {
       </div>
 
       <div className="search-results">
-        {loading && <p>Loading...</p>}
+        {loading && <p className='loading-text'>Loading...</p>}
         {error && <p className='error-message'>{error}</p>}
         { searchResults.length > 0 ? (
           <>

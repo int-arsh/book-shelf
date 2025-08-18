@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import BookSearch from './components/BookSearch';
 import BookshelfSection from './components/BookshelfSection';
+import Login from './components/Login';
+import Register from './components/Register';
+import NotesPage from './components/NotesPage';
 import './App.css'; 
 
 
@@ -11,6 +15,18 @@ function App() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [selectedSection, setSelectedSection] = useState(null);
+    const [isSearchActive, setIsSearchActive] = useState(false);
+    // NEW: get the user from the context.
+    const { user } = useAuth();
+
+    // New: set up a default authorization header for all axios requests.
+    useEffect(() => {
+      if (user && user.token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+      } else {
+        delete axios.defaults.headers.common['Authorization'];
+      }
+    }, [user]);
 
     // fetch all books from backend
     const initialFetchBooks = async () => {
@@ -20,7 +36,8 @@ function App() {
             setBooks(response.data);
         } catch (err) {
             console.log('Eroor fetching book:', err);
-            setError('Failed to load your bookshelf. Please try again.')
+            // if the user is logged in, still show the error message.it might be token issue.
+            setError(err.response?.data?.message || 'Failed to load your bookshelf. Please try again.');
         } finally {
             setLoading(false);
         }
@@ -46,8 +63,22 @@ function App() {
 
     // render on mount
     useEffect(() => {
-        initialFetchBooks();
-    }, []);
+      // only fetch books if the user is logged in.
+      if (user) {
+          initialFetchBooks();
+      } else {
+        setBooks([]);
+        setLoading(false);
+      }
+    }, [user]);
+
+    // NEW: This useEffect listens for logout and changes the view.
+  useEffect(() => {
+    if (!user) {
+      // If the user is logged out, navigate to the Login page.
+      setSelectedSection('Login');
+    }
+  }, [user]);
 
     // filter books based on status
     const readingBooks = books.filter(book => book.status === 'reading');
@@ -57,16 +88,32 @@ function App() {
     // A function to set the selected section from the Header component.
     const handleSectionSelect = (sectionName) => {
         setSelectedSection(sectionName);
+        if (sectionName !== 'Home') {
+          setIsSearchActive(false);
+        }
     };
 
 
     const renderSelectedSection = () => {
+      // if the user is not logged in, render the login or register component.
+      if (!user) {
+        switch (selectedSection) {
+          case 'Login':
+            return <Login onNavigate={handleSectionSelect} />;
+          case 'Register':
+            return <Register onNavigate={handleSectionSelect} />;
+          default:
+            return <p className='homepage-content'>Please login to view your bookshelf.</p>;
+        } 
+      }
+
       if (loading) {
         return <p>Loading your bookshelf...</p>;
       }
       if (error) {
         return <p className="error-message">{error}</p>;
       }
+      
       
       switch (selectedSection) {
         case 'Reading':
@@ -76,25 +123,28 @@ function App() {
         case 'Want to Read':
           return <BookshelfSection title="Want to Read" books={wantToReadBooks} onUpdate={handleBookUpdate} onBookRemoved={handleBookRemoved} />;
         case 'Notes':
-          // The notes section is a bit different, it might be an aggregation of all notes.
-          // For simplicity, we can have a placeholder here for now.
-          return <div className="notes-page"><h1>All Notes</h1><p>Notes functionality will be built here.</p></div>;
+          return <NotesPage books={books} />;
         case 'Home':
           default:
             // This is the blank homepage with the search bar.
             return (
               <>
+                {/* NEW: Conditionally render the homepage content */}
                 <BookSearch 
                   bookshelfBooks={books} 
                   onBookAdded={handleBookAdded} 
                   onBookRemoved={handleBookRemoved}
+                  onSearchActive={setIsSearchActive}
                 />
-                <div className="homepage-content">
-                  <p>Welcome to Your Personal <br></br>
-                    Bookshelf !
-                  </p>
-                  <p>Find books using the search bar above or navigate to your sections in the header.</p>
-                </div>
+                {!isSearchActive && (
+                  <div className="homepage-content">
+                    <p>Welcome to Your Personal <br></br>
+                      Bookshelf !
+                    </p>
+                    <p>Find books using the search bar above or navigate to your sections in the header.</p>
+                  </div>
+                )}
+                
               </>
           );
       }

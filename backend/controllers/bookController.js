@@ -13,7 +13,7 @@ const getBooks = async (req, res) => {
         // Find all documents in the 'books' collection.
         // Book.find({}) is a Mongoose method that returns all documents.
         // We use 'await' to pause the function until Mongoose has finished retrieving the data.
-        const books = await Book.find({});
+        const books = await Book.find({ user: req.user.id });
 
         // Send a success response (status 200) and the found books as a JSON array.
         // The 'res.status(200).json()' is our server's way of saying, "Here's what you asked for."
@@ -29,6 +29,10 @@ const getBooks = async (req, res) => {
 // --- Controller Function 2: Add a New Book ---
 // This function will be triggered when a POST request is made to the '/api/books' endpoint.
 const addBook = async (req, res) => {
+    // NEW: Explicitly check if the user is authenticated.
+    if (!req.user || !req.user.id) {
+        return res.status(401).json({ message: 'Not authorized, please log in' });
+    }
     // The book data will be sent in the request body (req.body).
     // Thanks to 'express.json()' middleware in our index.js, we can directly access this data.
     // We use object destructuring to pull out the fields we expect from the request body.
@@ -51,6 +55,7 @@ const addBook = async (req, res) => {
             posterUrl,
             totalPages,
             status,
+            user: req.user.id,
             // 'currentPage' and 'notes' have default values in our schema, so we don't need to pass them here.
         });
 
@@ -79,6 +84,11 @@ const updateBook = async (req, res) => {
         // If no book is found with the given ID, return a 404 Not Found error.
         if (!book) {
             return res.status(404).json({ message: 'Book not found' });
+        }
+
+        // NEW: add an ownership check.
+        if (book.user.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized' });
         }
 
         // Update the book in the database.
@@ -116,6 +126,11 @@ const deleteBook = async (req, res) => {
         // If no book is found, return a 404 Not Found error.
         if (!book) {
             return res.status(404).json({ message: 'Book not found' });
+        }
+
+        // NEW: add an ownership check.
+        if (book.user.toString() !== req.user.id) {
+            return res.status(401).json({ message: 'Not authorized' });
         }
 
         // Delete the book from the database.

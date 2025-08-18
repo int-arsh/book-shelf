@@ -1,29 +1,8 @@
-// backend/index.js
 
-// Import the 'express' library.
-// Express is a framework for Node.js that makes it easy to build web applications and APIs.
-// Think of it as a set of tools that helps our server handle incoming requests.
 const express = require('express');
-
-// Import the 'dotenv' library.
-// This library helps us load environment variables from a .env file into process.env.
-// Environment variables are like secret keys or configuration settings that we don't want
-// to hardcode directly into our code, especially sensitive ones like database credentials.
 require('dotenv').config();
-
-// Create an instance of the Express application.
-// This 'app' object is the core of our server. It will handle all incoming network requests.
 const app = express();
-
-// Import the 'cors' middleware.
-// CORS (Cross-Origin Resource Sharing) is a security feature that prevents web pages
-// from making requests to a different domain than the one that served the web page.
-// Since our frontend (React) will likely be running on a different port (e.g., 5173)
-// than our backend (e.g., 5000), we need to explicitly allow our frontend to talk to our backend.
 const cors = require('cors');
-
-// Import the database connection function we just created.
-// This line brings in our 'connectDB' function from the 'config/db.js' file.
 const connectDB = require('./config/db');
 
 // Import our book routes.
@@ -33,6 +12,9 @@ const bookRoutes = require('./routes/bookRoutes');
 
 // Import our new Google Books API route
 const apiRoutes = require('./routes/apiRoutes');
+
+// Import our user routes.
+const userRoutes = require('./routes/userRoutes');
 
 // Define the port number our server will listen on.
 // We first try to get it from environment variables (process.env.PORT), which is good for production.
@@ -57,8 +39,19 @@ app.use(express.json());
 // By calling cors() with no arguments, it enables CORS for all routes and origins.
 // For a beginner, this is fine, but in a real production app, you might want to restrict
 // this to only allow requests from your specific frontend domain for better security.
-app.use(cors());
 
+const whitelist = ['https://your-frontend-url.vercel.app']; // REPLACE WITH YOUR VERCEL URL
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+};
+
+app.use(cors(corsOptions));
 
 // Define the base route for our book API.
 // Any request that starts with '/api/books' will be handled by our bookRoutes.
@@ -69,6 +62,10 @@ app.use('/api/books', bookRoutes);
 // Use our Google Books API proxy route
 // All requests to /api/googlebooks will be handled by apiRoutes
 app.use('/api/googlebooks', apiRoutes);
+
+// Use our user routes
+// All requests to /api/users will be handled by userRoutes
+app.use('/api/users', userRoutes);
 
 // Define our first route (an API endpoint).
 // This is like defining a specific counter at our post office.
