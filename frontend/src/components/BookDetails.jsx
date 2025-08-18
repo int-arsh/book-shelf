@@ -1,7 +1,8 @@
 // frontend/src/components/BookDetails.jsx
 
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../api';
 
 // This component displays a single book on the bookshelf with notes and page tracking.
 const BookDetails = ({ book, onUpdate }) => {
@@ -43,7 +44,7 @@ const BookDetails = ({ book, onUpdate }) => {
         }
       }
 
-      const response = await axios.put(`http://localhost:5000/api/books/${book._id}`, updatedData);
+      const response = await api.put(`/books/${book._id}`, updatedData);
       console.log('Book updated successfully!');
 
       // The key change: After a successful update, we call the onUpdate function

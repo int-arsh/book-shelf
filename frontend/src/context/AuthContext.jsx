@@ -2,6 +2,7 @@
 
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
+import api from '../api';
 
 // 1. Create the Context object.
 // We'll export this so our Provider can use it.
@@ -31,7 +32,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     try {
       // Make a POST request to our backend's login endpoint.
-      const response = await axios.post('http://localhost:5000/api/users/login', { email, password });
+      const response = await api.post('/users/login', { email, password });
       
       // Save the user data (including the token) to state.
       setUser(response.data);
@@ -59,7 +60,7 @@ export const AuthProvider = ({ children }) => {
     setError(null);
     try {
       // Make a POST request to our backend's register endpoint.
-      const response = await axios.post('http://localhost:5000/api/users/register', { name, email, password });
+      const response = await api.post('/users/register', { name, email, password });
 
       // Save the new user data to state.
       setUser(response.data);

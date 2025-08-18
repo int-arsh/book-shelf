@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import BookCard from './BookCard';
+import api from '../api';
 
 
 
@@ -26,7 +27,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved, onSearchActive
   const handleAddBook = async (bookData) => {
     try{
       // Post request to backend api to add book
-      const response = await axios.post('http://localhost:5000/api/books', {
+      const response = await api.post('/books', {
           ...bookData,
           status: 'want-to-read', // Set the initial status
       });
@@ -56,7 +57,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved, onSearchActive
     if (!bookToRemove) return; // Should not happen
 
     try {
-      await axios.delete(`http://localhost:5000/api/books/${bookToRemove._id}`);
+      await api.delete(`/books/${bookToRemove._id}`);
       // Call the parent's function with the book's database ID.
       onBookRemoved(bookToRemove._id);
     } catch (err) {
@@ -91,7 +92,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved, onSearchActive
         // Set a timer to wait for 300ms after the user stops typing.
         const timer = setTimeout(async () => {
             try {
-        const response = await axios.get(`http://localhost:5000/api/googlebooks/search?q=${searchText}&maxResults=5`);
+        const response = await api.get(`/googlebooks/search?q=${searchText}&maxResults=5`);
         // Take the top 4 suggestions.
         const topSuggestions = response.data.items ? response.data.items.slice(0, 4) : [];
         setSuggestions(topSuggestions);
@@ -120,7 +121,7 @@ const BookSearch = ({ bookshelfBooks, onBookAdded, onBookRemoved, onSearchActive
     
     try {
       // Use our backend proxy route to search for books
-      const response = await axios.get(`http://localhost:5000/api/googlebooks/search?q=${searchText}`);
+      const response = await api.get(`/googlebooks/search?q=${searchText}`);
       // We only care about the `items` array, which contains the books
       setSearchResults(response.data.items || []);
       console.log(response.data)

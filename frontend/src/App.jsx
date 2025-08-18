@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from './api';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import BookSearch from './components/BookSearch';
@@ -19,20 +20,20 @@ function App() {
     // NEW: get the user from the context.
     const { user } = useAuth();
 
-    // New: set up a default authorization header for all axios requests.
-    useEffect(() => {
-      if (user && user.token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
-      } else {
-        delete axios.defaults.headers.common['Authorization'];
-      }
-    }, [user]);
+    // // New: set up a default authorization header for all axios requests.
+    // useEffect(() => {
+    //   if (user && user.token) {
+    //     axios.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+    //   } else {
+    //     delete axios.defaults.headers.common['Authorization'];
+    //   }
+    // }, [user]);
 
     // fetch all books from backend
     const initialFetchBooks = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:5000/api/books');
+            const response = await api.get('/books');
             setBooks(response.data);
         } catch (err) {
             console.log('Eroor fetching book:', err);
