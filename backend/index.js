@@ -40,7 +40,7 @@ app.use(express.json());
 // For a beginner, this is fine, but in a real production app, you might want to restrict
 // this to only allow requests from your specific frontend domain for better security.
 
-const whitelist = ['https://book-shelf-silk.vercel.app/']; // REPLACE WITH YOUR VERCEL URL
+const whitelist = ['https://book-shelf-silk.vercel.app']; // REPLACE WITH YOUR VERCEL URL
 const corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
