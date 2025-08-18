@@ -109,7 +109,7 @@ function App() {
       }
 
       if (loading) {
-        return <p>Loading your bookshelf...</p>;
+        return <p className='homepage-content'>Loading your bookshelf...</p>;
       }
       if (error) {
         return <p className="error-message">{error}</p>;
