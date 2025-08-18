@@ -27,12 +27,6 @@ const PORT = process.env.PORT || 5000;
 // as soon as our server starts.
 connectDB();
 
-// Middleware: express.json()
-// This is a built-in Express middleware function.
-// It tells our Express app to understand and parse incoming requests that have JSON payloads.
-// When our frontend sends data (like a new book) to our backend, it often sends it in JSON format.
-// This line makes sure our server can read that JSON data.
-app.use(express.json());
 
 // Middleware: cors()
 // Use the cors middleware to allow cross-origin requests.
@@ -50,6 +44,13 @@ const corsOptions = {
         }
     }
 };
+
+// Middleware: express.json()
+// This is a built-in Express middleware function.
+// It tells our Express app to understand and parse incoming requests that have JSON payloads.
+// When our frontend sends data (like a new book) to our backend, it often sends it in JSON format.
+// This line makes sure our server can read that JSON data.
+app.use(express.json());
 
 app.use(cors(corsOptions));
 
