@@ -1,0 +1,7 @@
+Django>=5.0
+djangorestframework>=3.14
+django-cors-headers>=4.3
+python-dotenv>=1.0
+PyJWT>=2.8
+psycopg2-binary>=2.9
+requests>=2.31
